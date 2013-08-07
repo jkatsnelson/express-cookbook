@@ -50,7 +50,7 @@ if node['app']['environment'] == "development"
 end
 
 # Install the NPM packages for the server
-execute "npm_install" do
+execute "npm_install TEST TEST" do
     command "cd #{node['app_root']} && /usr/local/bin/npm install"
 end
 
