@@ -49,9 +49,9 @@ if node['app']['environment'] == "development"
   end
 end
 
-# Install the NPM packages for the app
+# Install the NPM packages for the server
 execute "npm_install" do
-    command "cd #{node['app_root']} && /usr/local/bin/npm install"
+    command "cd #{node['app_root']}/server && /usr/local/bin/npm install"
 end
 
 
