@@ -31,7 +31,7 @@ end
 link "/usr/bin/node" do
   to "/usr/local/bin/node"
 end
-
+puts 'test'
 # Create or modify the ownership of the client/server directory
 execute "own-apache-folder" do
   command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['app_root']}/../client"
