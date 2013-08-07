@@ -34,11 +34,11 @@ end
 
 # Create or modify the ownership of the client/server directory
 execute "own-apache-folder" do
-  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['app_root']}/client"
+  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['app_root']}/../client"
   action :nothing
 end
 execute "own-node-folder" do
-  command "chown -R node:#{node['apache']['group']} #{node['app_root']}/server"
+  command "chown -R node:#{node['apache']['group']} #{node['app_root']}"
   action :nothing
 end
 
@@ -51,7 +51,7 @@ end
 
 # Install the NPM packages for the server
 execute "npm_install" do
-    command "cd #{node['app_root']}/server && /usr/local/bin/npm install"
+    command "cd #{node['app_root']} && /usr/local/bin/npm install"
 end
 
 
