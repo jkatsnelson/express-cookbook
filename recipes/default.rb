@@ -3,7 +3,7 @@
 # Recipe:: default
 #
 # Copyright (C) 2013 Blake Tidwell
-# 
+#
 # All rights reserved - Do Not Redistribute
 #
 
@@ -32,9 +32,9 @@ link "/usr/bin/node" do
   to "/usr/local/bin/node"
 end
 
-# Create or modify the ownership of the app/server directory
+# Create or modify the ownership of the client/server directory
 execute "own-apache-folder" do
-  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['app_root']}/app"
+  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['app_root']}/client"
   action :nothing
 end
 execute "own-node-folder" do

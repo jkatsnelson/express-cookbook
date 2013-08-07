@@ -20,7 +20,7 @@ end script
 
 script
     cd $NODE_HOME
-    sudo -E sh -c "exec sudo -u node NODE_ENV=$NODE_ENV /usr/local/bin/<%= node.app.environment == "development" ? "nodemon --debug -L --watch views --watch routes" : "node" %> $NODE_HOME/app.js > /var/log/node/node.log 2>&1"
+    sudo -E sh -c "exec sudo -u node NODE_ENV=$NODE_ENV /usr/local/bin/<%= node.app.environment == "development" ? "nodemon --debug --watch server" : "node" %> $NODE_HOME/server/app.js > /var/log/node/node.log 2>&1"
 end script
 
 post-start script
