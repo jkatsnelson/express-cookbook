@@ -50,7 +50,7 @@ if node['environment'] == "development"
 end
 
 # Install the NPM packages for the server
-execute "npm_install TEST TEST" do
+execute "npm_install" do
     command "cd #{node['node_server']['root']} && /usr/local/bin/npm install"
 end
 
@@ -122,7 +122,7 @@ service "monit" do
 end
 
 # Create a proxy definition for the Node back-end
-web_app "explore" do
+web_app "#{node['node_server']['name']}" do
   server_name node['fqdn']
   template "node_proxy.conf.erb"
   notifies :restart, 'service[apache2]'

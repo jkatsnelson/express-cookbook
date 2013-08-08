@@ -1,4 +1,5 @@
 # Defaults based on vanilla Express.js scaffold
+default['node_server']['name'] = 'express'
 default['node_server']['port'] = 3000
 
 # Relative paths of public, private, and main server JS
