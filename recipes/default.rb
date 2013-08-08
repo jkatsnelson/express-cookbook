@@ -18,8 +18,13 @@ node.default['apache']['default_modules'].push('proxy_http')
 node.default['apache']['listen_ports'] = ["8080"]
 include_recipe "apache2"
 
+# EPEL required to install Monit and Node
+include_recipe "yum::epel"
+
 # Install and start the Node app as a service
-include_recipe "nodejs"
+package "npm" do
+    action :install
+end
 
 # Create the node user/group to run the application
 # The group is used for logging
@@ -82,9 +87,6 @@ service "node" do
     provider Chef::Provider::Service::Upstart
     action :restart
 end
-
-# EPEL required to install Monit
-include_recipe "yum::epel"
 
 package "monit" do
     action :install
