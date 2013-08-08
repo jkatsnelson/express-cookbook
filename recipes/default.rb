@@ -34,7 +34,7 @@ end
 
 # Default yum package does not add node to the traditional loc on CentOS
 link "/usr/bin/node" do
-  to "/usr/local/bin/node"
+  to "/usr/bin/node_g"
 end
 
 # Create or modify the ownership of the client/server directory
@@ -50,13 +50,13 @@ end
 # Install nodemon for development
 if node['environment'] == "development"
   execute "install_nodemon" do
-    command "sudo /usr/local/bin/npm install -g nodemon"
+    command "sudo /usr/bin/npm install -g nodemon"
   end
 end
 
 # Install the NPM packages for the server
 execute "npm_install" do
-    command "cd #{node['node_server']['root']} && /usr/local/bin/npm install"
+    command "cd #{node['node_server']['root']} && /usr/bin/npm install"
 end
 
 
