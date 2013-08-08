@@ -11,8 +11,8 @@ respawn
 respawn limit 99 5
 
 # What environment are we in
-env NODE_ENV=<%= node.app.environment %>
-env NODE_HOME=<%= node.app_root %>
+env NODE_ENV=<%= node.environment %>
+env NODE_HOME=<%= node.node_server.root %>
 
 pre-start script
     sudo -E sh -c 'echo env=$NODE_ENV home=$NODE_HOME > /var/log/node/node.log 2>&1'
@@ -20,7 +20,7 @@ end script
 
 script
     cd $NODE_HOME
-    sudo -E sh -c "exec sudo -u node NODE_ENV=$NODE_ENV /usr/local/bin/<%= node.app.environment == "development" ? "nodemon --debug --watch server" : "node" %> $NODE_HOME/app.js > /var/log/node/node.log 2>&1"
+    sudo -E sh -c "exec sudo -u node NODE_ENV=$NODE_ENV /usr/local/bin/<%= node.environment == "development" ? "nodemon --debug --watch server" : "node" %> $NODE_HOME/<%= node.node_server.paths.main_js %> > /var/log/node/node.log 2>&1"
 end script
 
 post-start script

@@ -31,19 +31,19 @@ end
 link "/usr/bin/node" do
   to "/usr/local/bin/node"
 end
-puts 'test'
+
 # Create or modify the ownership of the client/server directory
-execute "own-apache-folder" do
-  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['app_root']}/../client"
+execute "own-node-folder" do
+  command "chown -R node:#{node['apache']['group']} #{node['node_server']['root']}#{node['node_server']['paths']['private']}"
   action :nothing
 end
-execute "own-node-folder" do
-  command "chown -R node:#{node['apache']['group']} #{node['app_root']}"
+execute "own-apache-folder" do
+  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['node_server']['root']}#{node['node_server']['paths']['private']}"
   action :nothing
 end
 
 # Install nodemon for development
-if node['app']['environment'] == "development"
+if node['environment'] == "development"
   execute "install_nodemon" do
     command "sudo /usr/local/bin/npm install -g nodemon"
   end
@@ -51,7 +51,7 @@ end
 
 # Install the NPM packages for the server
 execute "npm_install TEST TEST" do
-    command "cd #{node['app_root']} && /usr/local/bin/npm install"
+    command "cd #{node['node_server']['root']} && /usr/local/bin/npm install"
 end
 
 

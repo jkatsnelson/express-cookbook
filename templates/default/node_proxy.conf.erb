@@ -8,8 +8,8 @@
   </Proxy>
 
   ProxyPreserveHost On
-  ProxyPass / http://127.0.0.1:<%= node['app']['port'] %>/ retry=0
-  ProxyPassReverse / http://127.0.0.1::<%= node['app']['port'] %>/
+  ProxyPass / http://127.0.0.1:<%= node['node_server']['port'] %>/ retry=0
+  ProxyPassReverse / http://127.0.0.1::<%= node['node_server']['port'] %>/
   <Location />
     Order allow,deny
     Allow from all
