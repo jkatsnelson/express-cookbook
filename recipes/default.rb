@@ -18,8 +18,13 @@ node.default['apache']['default_modules'].push('proxy_http')
 node.default['apache']['listen_ports'] = ["8080"]
 include_recipe "apache2"
 
+# EPEL required to install Monit and Node
+include_recipe "yum::epel"
+
 # Install and start the Node app as a service
-include_recipe "nodejs"
+package "npm" do
+    action :install
+end
 
 # Create the node user/group to run the application
 # The group is used for logging
@@ -29,29 +34,29 @@ end
 
 # Default yum package does not add node to the traditional loc on CentOS
 link "/usr/bin/node" do
-  to "/usr/local/bin/node"
+  to "/usr/bin/node_g"
 end
-puts 'test'
+
 # Create or modify the ownership of the client/server directory
-execute "own-apache-folder" do
-  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['app_root']}/../client"
+execute "own-node-folder" do
+  command "chown -R node:#{node['apache']['group']} #{node['node_server']['root']}#{node['node_server']['paths']['private']}"
   action :nothing
 end
-execute "own-node-folder" do
-  command "chown -R node:#{node['apache']['group']} #{node['app_root']}"
+execute "own-apache-folder" do
+  command "chown -R #{node['apache']['user']}:#{node['apache']['group']} #{node['node_server']['root']}#{node['node_server']['paths']['private']}"
   action :nothing
 end
 
 # Install nodemon for development
-if node['app']['environment'] == "development"
+if node['environment'] == "development"
   execute "install_nodemon" do
-    command "sudo /usr/local/bin/npm install -g nodemon"
+    command "sudo /usr/bin/npm install -g nodemon"
   end
 end
 
 # Install the NPM packages for the server
-execute "npm_install TEST TEST" do
-    command "cd #{node['app_root']} && /usr/local/bin/npm install"
+execute "npm_install" do
+    command "cd #{node['node_server']['root']} && /usr/bin/npm install"
 end
 
 
@@ -82,9 +87,6 @@ service "node" do
     provider Chef::Provider::Service::Upstart
     action :restart
 end
-
-# EPEL required to install Monit
-include_recipe "yum::epel"
 
 package "monit" do
     action :install
@@ -122,7 +124,7 @@ service "monit" do
 end
 
 # Create a proxy definition for the Node back-end
-web_app "explore" do
+web_app "#{node['node_server']['name']}" do
   server_name node['fqdn']
   template "node_proxy.conf.erb"
   notifies :restart, 'service[apache2]'
